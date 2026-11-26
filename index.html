@@ -1265,7 +1265,7 @@ let resumed = false;
 $('resumeq').addEventListener('click', () => {
   if (lang === 'us') return;
   resumed = true;
-  Object.assign(ans, {age:2, work:1, dep:[0,1], health:2, papers:2});
+  Object.assign(ans, {age:2, work:1, dep:[0,1,2], health:2, papers:2});
   step = Q.length; renderQ();
   $('quiz').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
 });
