@@ -724,6 +724,7 @@ footer.site .fcol a{color:#c3c9d6}
 .ck-h{font:12.5px Figtree,system-ui,sans-serif;color:#8d97ab;margin-bottom:4px}
 .ok2{display:inline-block;background:#12b76a;color:#06231a;font-weight:800;border-radius:3px;padding:0 6px;margin-right:8px;font-size:11.5px}
 .ck,.prose .ck{margin:0}
+:root[data-lang=us] .notus{display:none}
 </style>
 </head>
 <body>
@@ -821,7 +822,7 @@ footer.site .fcol a{color:#c3c9d6}
     <div>
       <h2 data-zh="你符合条件吗？">Do you qualify?</h2>
       <p class="lede" data-zh="我们的捐赠方资助的是成效。为了让每一美元都花得值，我们优先考虑最有可能完成项目的申请人。回答五个问题，看看你会被分到哪一类。">Our donors fund outcomes. To make every dollar count, we prioritize applicants most likely to finish the <span class="w" data-us="program" data-gb="programme">program</span>. Answer five questions to see where you'd be placed.</p>
-      <div class="qbtns"><button class="btn ghost" type="button" id="example" data-zh="载入示例申请人">Load an example applicant</button><button class="btn ghost" type="button" id="resumeq" data-zh="继续上次填写">Resume your last answers</button></div><p class="small saved" data-zh="本设备上保存的回答：10 月 29 日 03:08。">Answers saved on this device: Oct 29, 3:08 a.m.</p>
+      <div class="qbtns"><button class="btn ghost" type="button" id="example" data-zh="载入示例申请人">Load an example applicant</button><button class="btn ghost notus" type="button" id="resumeq" data-zh="继续上次填写">Resume your last answers</button></div><p class="small saved notus" data-zh="本设备上保存的回答：10 月 29 日 03:08。">Answers saved on this device: Oct 29, 3:08 a.m.</p>
       <p class="pen" data-zh="你掉下去，下面有网。除非网子铺上之前，你就已经在下面了。">If you fall, there's a net. Unless you were already down there before they put it up.</p>
     </div>
     <form class="panel" id="quiz" novalidate>
@@ -1237,6 +1238,7 @@ $('quiz').addEventListener('submit', e => {
 $('back').addEventListener('click', () => { save(); if (step > 0) step--; renderQ(); });
 let resumed = false;
 $('resumeq').addEventListener('click', () => {
+  if (lang === 'us') return;
   resumed = true;
   Object.assign(ans, {age:2, work:1, dep:[0,1], health:2, papers:2});
   step = Q.length; renderQ();
@@ -1650,6 +1652,7 @@ const setLang = l => {
   if (l !== 'zh') document.querySelectorAll('.w[data-us]').forEach(w => { w.textContent = w.dataset[l]; });
   $('find').placeholder = t('Search records', '搜索记录');
   markLang();
+  if (l === 'us' && resumed) { resumed = false; step = 0; Object.keys(ans).forEach(k => delete ans[k]); }
   drawDays(); showDay(day); drawChk(); requestAnimationFrame(crack); renderQ(); redoLookup(); showAmt(); runCheck(); drawWall(); drawCounters(); drawMa(); drawEnd(false);
   if (ended) $('home').disabled = true;
 };
