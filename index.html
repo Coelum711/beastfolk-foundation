@@ -1250,6 +1250,11 @@ const save = () => {
   const got = [...document.querySelectorAll(`#q input[name=${q.k}]:checked`)].map(i => +i.value);
   ans[q.k] = q.multi ? got : got[0];
 };
+$('q').addEventListener('change', e => {
+  const x = e.target; if (x.name !== 'dep' || !x.checked) return;
+  const none = 3;
+  document.querySelectorAll('#q input[name=dep]').forEach(i => { if (+x.value === none ? +i.value !== none : +i.value === none) i.checked = false; });
+});
 $('quiz').addEventListener('submit', e => {
   e.preventDefault();
   if (step === Q.length) { step = 0; resumed = false; Object.keys(ans).forEach(k => delete ans[k]); renderQ(); return; }
