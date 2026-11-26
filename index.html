@@ -703,9 +703,8 @@ footer.site .fcol a{color:#c3c9d6}
 .hl.all li{margin-bottom:8px}
 
 .anote,.orig,.gbonly{display:none}
-:root[data-unlocked][data-lang=us] .anote{display:flex}
+:root[data-unlocked][data-lang=us] .anote,:root[data-unlocked][data-lang=zh] .anote{display:flex}
 :root[data-zhkey][data-lang=zh] .orig{display:block}
-:root[data-zhkey][data-lang=zh] .anote{display:flex}
 .bnote{display:none;gap:8px;align-items:flex-start;max-width:34em;margin:12px 0;padding:8px 12px 9px;background:color-mix(in srgb,var(--bn) 8%,#fff);border:1px solid color-mix(in srgb,var(--bn) 30%,#fff);border-left:3px solid var(--bn);border-radius:4px 10px 10px 4px;font:14.5px/1.6 "Noto Sans SC",Figtree,system-ui,sans-serif;color:#1d2430}
 .bnote .av3{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bn);color:#fff;font:700 9.5px/22px Figtree,sans-serif;text-align:center;letter-spacing:.02em}
 .bnote b{color:var(--bn);font-size:12.5px;margin-right:4px}
@@ -715,9 +714,6 @@ footer.site .fcol a{color:#c3c9d6}
 :root[data-unlocked][data-lang=zh]:not([data-zhkey]) .bnote>span{filter:blur(4.5px);opacity:.55}
 :root[data-unlocked][data-lang=zh]:not([data-zhkey]) .bnote::after{content:"🔒 加密批注";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:600 12.5px "Noto Sans SC",Figtree,sans-serif;color:#1d2430;background:rgba(255,255,255,.9);border:1px solid #ccd;border-radius:999px;padding:2px 10px;white-space:nowrap}
 .stats .bnote{background:rgba(255,255,255,.95)}
-:root[data-unlocked][data-lang=zh]:not([data-zhkey]) .anote{display:flex;position:relative;user-select:none;pointer-events:none}
-:root[data-unlocked][data-lang=zh]:not([data-zhkey]) .anote>span{filter:blur(4.5px);opacity:.55}
-:root[data-unlocked][data-lang=zh]:not([data-zhkey]) .anote::after{content:"🔒 加密批注";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:600 12.5px "Noto Sans SC",Figtree,sans-serif;color:#17306b;background:rgba(255,255,255,.9);border:1px solid #b9cdfb;border-radius:999px;padding:2px 10px;white-space:nowrap}
 :root[data-unlocked][data-lang=gb] .gbonly{display:block}
 .anote{gap:8px;align-items:flex-start;max-width:30em;margin:12px 0;padding:8px 12px 9px;background:#eaf1ff;border:1px solid #b9cdfb;border-left:3px solid #2f6bff;border-radius:4px 10px 10px 4px;font:14.5px/1.45 Figtree,system-ui,sans-serif;color:#17306b}
 .anote b{color:#2f6bff;font-size:12.5px;margin-right:4px}
