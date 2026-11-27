@@ -461,8 +461,9 @@ footer.site{background:#000;color:#9aa2b2;font-size:14.5px;padding:48px max(5vw,
 .ad-whyp p{margin:0 0 4px}.ad-whyp ul{margin:0 0 6px;padding-left:16px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
 .ad-whyp a{color:var(--blue);font-weight:600;display:block;margin-bottom:4px}
 .cachepg{position:fixed;inset:0;z-index:30;overflow-y:auto;background:#121216;color:#d8d8de;font:15px/1.55 Arial,Helvetica,sans-serif}
-.cp-bar{position:sticky;top:0;display:flex;gap:14px;align-items:center;padding:8px 14px;background:#e9e9ec;color:#333;font:12.5px/1.4 Arial,sans-serif;border-bottom:1px solid #bbb}
+.cp-bar{position:sticky;top:0;z-index:5;display:flex;gap:14px;align-items:center;padding:8px 14px;background:#e9e9ec;color:#333;font:12.5px/1.4 Arial,sans-serif;border-bottom:1px solid #bbb}
 .cp-bar .cp-back{color:#1a0dab;font-weight:700;white-space:nowrap}
+@media(max-width:600px){.cp-bar{font-size:11.5px;gap:10px;align-items:flex-start}.cp-bar span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}}
 .cp-gate{max-width:520px;margin:12vh auto;padding:28px;background:#1d1d23;border:1px solid #333;border-radius:10px;text-align:center}
 .cp-gate h1{font:700 22px Arial,sans-serif;color:#fff;margin:0 0 10px}
 .cp-gbtn{display:flex;gap:10px;justify-content:center;margin-top:16px}
