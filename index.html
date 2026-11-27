@@ -1774,7 +1774,7 @@ const route = () => {
     const id = h.slice(2).replace(/\/$/, '');
     if (id.startsWith('staff/') && id !== 'staff/out' && !sess('bof-staff')) { location.replace('#/staff'); return; }
     const staffOnly = (id === 'drafts' || id.startsWith('drafts/') || id === 'team/arthur' || id === 'beastfolk/health/archive') && !sess('bof-staff');
-    const cacheLocked = id.startsWith('cache/') && !root.dataset.unlocked;
+    const cacheLocked = id.startsWith('cache/') && !sess('bof-staff');
     const tpl = (!staffOnly && !cacheLocked && $('pg-' + id.replace(/\//g, '--'))) || (staffOnly && id === 'beastfolk/health/archive' && $('pg-archived-locked')) || $('pg-404');
     page.replaceChildren(tpl.content.cloneNode(true));
     page.querySelectorAll('[data-mount]').forEach(ph => { const sec = $(ph.dataset.mount); if (sec) { sec.dataset.mounted = '1'; ph.replaceWith(sec); } });
@@ -1987,7 +1987,7 @@ const drawAd = () => {
     + `<a class="ad-body" href="${a.url}" target="_blank" rel="noopener noreferrer"><b>${c.brand}</b><span>${c.text}</span><em>${c.cta} &#8599;</em></a>`
     + `<span class="ad-meta">AO3 · 米英 · ${zh() ? a.work[1] : a.work[0]} · ${a.rating}</span>`
     + `<button type="button" class="ad-stop">${t('Stop seeing this ad', '不再显示此广告')}</button>`
-    + (root.dataset.unlocked ? `<button type="button" class="ad-why" aria-expanded="false">${t('ⓘ Why am I seeing this ad?', 'ⓘ 为什么我会看到这条广告？')}</button><div class="ad-whyp" hidden><p>${t('Based on your recent activity, including searches in private windows:', '根据你最近的活动，包括无痕窗口中的搜索：')}</p><ul><li>staynow hourly 23rd st</li><li>robin folded ear oakland</li><li>robin intersex reviews</li></ul><a href="#/cache/robin">${t('View a cached page from this activity', '查看这次活动中的一个缓存页面')}</a><span class="small">${t('Ads personalisation: on. Change in settings.', '个性化广告：已开启。可在设置中更改。')}</span></div>` : '');
+    + (sess('bof-staff') ? `<button type="button" class="ad-why" aria-expanded="false">${t('ⓘ Why am I seeing this ad?', 'ⓘ 为什么我会看到这条广告？')}</button><div class="ad-whyp" hidden><p>${t('Based on your recent activity, including searches in private windows:', '根据你最近的活动，包括无痕窗口中的搜索：')}</p><ul><li>staynow hourly 23rd st</li><li>robin folded ear oakland</li><li>robin intersex reviews</li></ul><a href="#/cache/robin">${t('View a cached page from this activity', '查看这次活动中的一个缓存页面')}</a><span class="small">${t('Ads personalisation: on. Change in settings.', '个性化广告：已开启。可在设置中更改。')}</span></div>` : '');
 };
 adEl.addEventListener('click', e => { if (e.target.closest('.ad-stop')) { if (!adHidden.includes(adPick)) adHidden.push(adPick); try { localStorage.setItem('bof-ad-hidden', JSON.stringify(adHidden)); } catch (er) {} adSnooze = location.hash; nextAd(); adEl.hidden = true; root.classList.remove('ad-on'); return; } const w = e.target.closest('.ad-why'); if (w) { const pnl = adEl.querySelector('.ad-whyp'); pnl.hidden = !pnl.hidden; w.setAttribute('aria-expanded', !pnl.hidden); return; } if (e.target.closest('a[href="#/cache/robin"]')) { adEl.hidden = true; root.classList.remove('ad-on'); } if (e.target.closest('.ad-x')) { adSnooze = location.hash; nextAd(); adEl.hidden = true; root.classList.remove('ad-on'); } });
 addEventListener('hashchange', () => requestAnimationFrame(() => { drawAd(); if (typeof drawChat === 'function') drawChat(); }));
