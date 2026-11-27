@@ -456,6 +456,7 @@ footer.site{background:#000;color:#9aa2b2;font-size:14.5px;padding:48px max(5vw,
 .hfarch td{vertical-align:top;font-size:14.5px}
 .fin.hfarch td:not(:first-child),.fin.hfarch th{text-align:left}
 .hfarch td:first-child{font-weight:600;width:22%}
+.ad-stop{display:block;margin-top:4px;border:0;background:none;padding:0;font:12px Figtree,"Noto Sans SC",sans-serif;color:#8a93a6;cursor:pointer;text-decoration:underline;text-align:left}
 .ad-why{display:block;margin-top:6px;border:0;background:none;padding:0;font:12px Figtree,"Noto Sans SC",sans-serif;color:#5b647a;cursor:pointer;text-align:left}
 .ad-whyp{margin-top:6px;padding:8px 10px;background:#f6f7f9;border-radius:8px;font-size:12.5px;color:#3a4356}
 .ad-whyp p{margin:0 0 4px}.ad-whyp ul{margin:0 0 6px;padding-left:16px;font-family:ui-monospace,Menlo,monospace;font-size:12px}
@@ -1972,19 +1973,23 @@ const adEl = $('ad');
 let adPick = Math.floor(Math.random() * ADS.length);
 let adSnooze = null;
 const adClosed = () => adSnooze !== null && adSnooze === location.hash;
-const nextAd = () => { if (ADS.length > 1) { let n; do { n = Math.floor(Math.random() * ADS.length); } while (n === adPick); adPick = n; } };
+let adHidden = []; try { adHidden = JSON.parse(localStorage.getItem('bof-ad-hidden') || '[]'); } catch (e) {}
+const adPool = () => ADS.map((_, i) => i).filter(i => !adHidden.includes(i));
+const nextAd = () => { const pool = adPool().filter(i => i !== adPick); const all = adPool(); const from = pool.length ? pool : all; adPick = from.length ? from[Math.floor(Math.random() * from.length)] : -1; };
+if (adHidden.includes(adPick)) nextAd();
 const drawAd = () => {
   const route = root.dataset.route || '';
   const show = !adClosed() && !route.startsWith('staff') && !route.startsWith('cache') && location.hash !== '#missing' && (route || !matchMedia('(max-width:600px)').matches || scrollY > innerHeight * 0.8);
-  adEl.hidden = !show; if (!show) return;
+  adEl.hidden = !show || adPick < 0; if (!show || adPick < 0) return;
   const a = ADS[adPick]; const c = zh() ? a.zh : a.en;
   adEl.innerHTML = `<button type="button" class="ad-x" aria-label="${t('Close ad', '关闭广告')}">&times;</button>`
     + `<span class="ad-tag">${t('Sponsored', '赞助内容')}</span>`
     + `<a class="ad-body" href="${a.url}" target="_blank" rel="noopener noreferrer"><b>${c.brand}</b><span>${c.text}</span><em>${c.cta} &#8599;</em></a>`
     + `<span class="ad-meta">AO3 · 米英 · ${zh() ? a.work[1] : a.work[0]} · ${a.rating}</span>`
+    + `<button type="button" class="ad-stop">${t('Stop seeing this ad', '不再显示此广告')}</button>`
     + (root.dataset.unlocked ? `<button type="button" class="ad-why" aria-expanded="false">${t('ⓘ Why am I seeing this ad?', 'ⓘ 为什么我会看到这条广告？')}</button><div class="ad-whyp" hidden><p>${t('Based on your recent activity, including searches in private windows:', '根据你最近的活动，包括无痕窗口中的搜索：')}</p><ul><li>staynow hourly 23rd st</li><li>robin folded ear oakland</li><li>robin intersex reviews</li></ul><a href="#/cache/robin">${t('View a cached page from this activity', '查看这次活动中的一个缓存页面')}</a><span class="small">${t('Ads personalisation: on. Change in settings.', '个性化广告：已开启。可在设置中更改。')}</span></div>` : '');
 };
-adEl.addEventListener('click', e => { const w = e.target.closest('.ad-why'); if (w) { const pnl = adEl.querySelector('.ad-whyp'); pnl.hidden = !pnl.hidden; w.setAttribute('aria-expanded', !pnl.hidden); return; } if (e.target.closest('a[href="#/cache/robin"]')) { adEl.hidden = true; root.classList.remove('ad-on'); } if (e.target.closest('.ad-x')) { adSnooze = location.hash; nextAd(); adEl.hidden = true; root.classList.remove('ad-on'); } });
+adEl.addEventListener('click', e => { if (e.target.closest('.ad-stop')) { if (!adHidden.includes(adPick)) adHidden.push(adPick); try { localStorage.setItem('bof-ad-hidden', JSON.stringify(adHidden)); } catch (er) {} adSnooze = location.hash; nextAd(); adEl.hidden = true; root.classList.remove('ad-on'); return; } const w = e.target.closest('.ad-why'); if (w) { const pnl = adEl.querySelector('.ad-whyp'); pnl.hidden = !pnl.hidden; w.setAttribute('aria-expanded', !pnl.hidden); return; } if (e.target.closest('a[href="#/cache/robin"]')) { adEl.hidden = true; root.classList.remove('ad-on'); } if (e.target.closest('.ad-x')) { adSnooze = location.hash; nextAd(); adEl.hidden = true; root.classList.remove('ad-on'); } });
 addEventListener('hashchange', () => requestAnimationFrame(() => { drawAd(); if (typeof drawChat === 'function') drawChat(); }));
 requestAnimationFrame(drawAd);
 const heroZone = () => root.classList.toggle('in-hero', !root.dataset.route && scrollY < innerHeight * 0.8);
